@@ -63,8 +63,13 @@ jobs:
       - name: Static Analysis with pylint
         run: pylint --load-plugins pylint_django --django-settings-module=api.settings --fail-under=5 api/**/*.py
 
-      - name: Django Coverage action
-        uses: actions/python-django-coverage-gitHub-action@0.9
-        with:
-          django-app: 'sample_app'
-          minimum-coverage: '86'
+      - name: Análise de cobertura de testes
+        run: |
+          coverage run api/manage.py test api
+          coverage report --fail-under=90
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PORT: 5432
+          POSTGRES_PASSWORD: postgres
+
