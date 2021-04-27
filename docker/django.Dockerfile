@@ -6,6 +6,6 @@ COPY api /api
 
 WORKDIR /api
 
-RUN pip3 install --upgrade pip
+RUN pip3 install --upgrade pip==20.3.4
 
 RUN pip3 install -r requirements.txt
