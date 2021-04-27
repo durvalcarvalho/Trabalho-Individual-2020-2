@@ -41,7 +41,7 @@ jobs:
       - name: Install requirements # install application requirements
         run: pip install -r api/requirements.txt
 
-      - name: Análise Estática de código # check code formatting
+      - name: ⭐ Análise Estática de código # check code formatting
         run: pycodestyle --statistics .
 
       - name: Run Migrations # run migrations to create table in side car db container
@@ -52,7 +52,7 @@ jobs:
           POSTGRES_PORT: 5432
           POSTGRES_PASSWORD: postgres
 
-      - name: Run Test # running tests
+      - name: ⭐⭐ Run Test # running tests
         run: python api/manage.py test
         env:
           POSTGRES_DB: postgres
@@ -60,10 +60,10 @@ jobs:
           POSTGRES_PORT: 5432
           POSTGRES_PASSWORD: postgres
 
-      - name: Static Analysis with pylint
+      - name: ⭐⭐⭐ Static Analysis with pylint
         run: pylint --load-plugins pylint_django --django-settings-module=api.settings --fail-under=5 api/**/*.py
 
-      - name: Análise de cobertura de testes
+      - name: ⭐⭐⭐⭐ Análise de cobertura de testes
         run: |
           coverage run api/manage.py test api
           coverage report --fail-under=90
