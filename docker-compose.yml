@@ -14,11 +14,25 @@ services:
       context: .
       dockerfile: docker/django.Dockerfile
     command: ["sh", "start.sh"]
+    volumes:
+      - ./api:/api
     ports:
       - 8000:8000
     env_file:
       - ./.envs/.django
       - ./.envs/.postgres
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/nodejs.Dockerfile
+    volumes:
+      - ./client:/client
+    command: /bin/sh -c "yarn && quasar dev"
+    ports:
+      - 8080:8080
     depends_on:
       - db
 
