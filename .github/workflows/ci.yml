@@ -42,7 +42,7 @@ jobs:
         run: pip install -r api/requirements.txt
 
       - name: ⭐ Análise folha de estilo com pycodestyle
-        run: pycodestyle --statistics .
+        run: pycodestyle --statistics api/.
 
       - name: Run Migrations # run migrations to create table in side car db container
         run: python api/manage.py migrate
