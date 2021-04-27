@@ -1,0 +1,33 @@
+name: CI Node Application
+
+on: push
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [15.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Run tests
+        working-directory: client
+        run: |
+          yarn install
+          yarn test
+
+      - name: Run Lint
+        working-directory: client
+        run: |
+          yarn install
+          yarn lint
