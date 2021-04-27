@@ -21,6 +21,7 @@ jobs:
     steps:
       - name: Checkout code # checking our the code at current commit that triggers the workflow
         uses: actions/checkout@v2
+
       - name: Cache dependency # caching dependency will make our build faster.
         uses: actions/cache@v2 # for more info checkout pip section documentation at https://github.com/actions/cache
         with:
@@ -28,16 +29,21 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
+
       - name: Set up Python 3.8 # setting python environment to 3.x
         uses: actions/setup-python@v2
         with:
           python-version: '3.8' # if you want multiple python version run just use matrix strategy in job config. See the documentation of GitHub Actions
+
       - name: Check Python version # checking the python version to see if 3.x is installed.
         run: python --version
+
       - name: Install requirements # install application requirements
         run: pip install -r api/requirements.txt
-      - name: Check Syntax # check code formatting
+
+      - name: Análise Estática de código # check code formatting
         run: pycodestyle --statistics .
+
       - name: Run Migrations # run migrations to create table in side car db container
         run: python api/manage.py migrate
         env:
@@ -45,6 +51,7 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PORT: 5432
           POSTGRES_PASSWORD: postgres
+
       - name: Run Test # running tests
         run: python api/manage.py test
         env:
@@ -52,3 +59,6 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PORT: 5432
           POSTGRES_PASSWORD: postgres
+
+      - name: Lint with pylint
+        run: pylint --load-plugins pylint_django --django-settings-module=api.settings --fail-under=5 api/**/*.py
